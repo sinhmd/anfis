@@ -216,10 +216,6 @@ def backprop(ANFISObj, columnX, columns, theWSum, theW, theLayerFive):
 
             bucket3 = np.empty(len(ANFISObj.X))
             for rowX in range(len(ANFISObj.X)):
-                varToTest = ANFISObj.X[rowX,columnX]
-                tmpRow = np.empty(len(ANFISObj.memFuncs))
-                tmpRow.fill(varToTest)
-
                 bucket2 = np.empty(ANFISObj.Y.ndim)
                 for colY in range(ANFISObj.Y.ndim):
 
@@ -228,7 +224,7 @@ def backprop(ANFISObj, columnX, columns, theWSum, theW, theLayerFive):
 
                     senSit = mfDerivs.partial_dMF(ANFISObj.X[rowX,columnX],ANFISObj.memFuncs[columnX][MF],alpha)
                     # produces d_ruleOutput/d_parameterWithinMF
-                    dW_dAplha = senSit * np.array([np.prod([ANFISObj.memClass.evaluateMF(tmpRow)[c][ANFISObj.rules[r][c]] for c in adjCols]) for r in rulesWithAlpha])
+                    dW_dAplha = senSit * np.array([np.prod([ANFISObj.memClass.evaluateMF(ANFISObj.X[rowX])[c][ANFISObj.rules[r][c]] for c in adjCols]) for r in rulesWithAlpha])
 
                     bucket1 = np.empty(len(ANFISObj.rules[:,0]))
                     for consequent in range(len(ANFISObj.rules[:,0])):
